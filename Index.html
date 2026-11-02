@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<title>Tiwari Ledger</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;padding:15px;background:#0b1220;
+ color:#fff;font-family:Arial,sans-serif;
+}
+.app{max-width:520px;margin:auto}
+header{padding:10px 2px}
+header h1{color:#38bdf8;margin:0;font-size:27px}
+header p{color:#94a3b8;font-size:13px}
+.card{
+ background:#172337;border:1px solid #293a53;
+ border-radius:16px;padding:17px;margin:14px 0;
+}
+.hero{background:linear-gradient(135deg,#075985,#164e63)}
+.label{color:#94a3b8;font-size:13px}
+.big{font-size:30px;font-weight:bold;margin:9px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#172337;padding:14px;border-radius:13px}
+.stat strong{display:block;font-size:19px;margin-top:8px}
+.green{color:#4ade80}
+.yellow{color:#facc15}
+.red{color:#fb7185}
+.blue{color:#38bdf8}
+input,select,button{
+ width:100%;padding:13px;margin-top:10px;
+ border-radius:10px;border:1px solid #34445c;
+ background:#0f1b2d;color:white;font-size:15px;
+}
+button{background:#0891b2;border:0;font-weight:bold}
+button:active{opacity:.7}
+.status{padding:14px;border-radius:12px;font-weight:bold}
+.safe{background:#064e3b;color:#86efac}
+.warning{background:#713f12;color:#fde68a}
+.danger{background:#7f1d1d;color:#fecaca}
+.transaction{
+ background:#0f1b2d;padding:13px;margin-top:9px;
+ border-radius:11px;display:flex;
+ justify-content:space-between;align-items:center;gap:8px;
+}
+.transaction small{color:#94a3b8}
+.delete{width:auto;padding:8px;background:#991b1b;margin:0}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bar{height:10px;background:#334155;border-radius:20px;overflow:hidden;margin:12px 0}
+.fill{height:100%;background:#38bdf8;width:0%;transition:.3s}
+hr{border:0;border-top:1px solid #34445c;margin:15px 0}
+footer{text-align:center;color:#64748b;font-size:12px;padding:20px}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+<h1>💰 Tiwari Ledger</h1>
+<p>Personal Monthly & Daily Expense Manager</p>
+<p>Made with ❤️ by <b>Himanshu Tiwari</b></p>
+</header>
+
+<!-- MONTH SELECT -->
+<div class="card">
+ <div class="label">SELECT MONTH</div>
+ <input type="month" id="month">
+</div>
+
+<!-- BALANCE -->
+<div class="card hero">
+ <div class="label">AVAILABLE BALANCE</div>
+ <div class="big" id="balance">₹0</div>
+ <div class="label">Monthly Income - Monthly Expenses</div>
+</div>
+
+<!-- INCOME / EXPENSE -->
+<div class="grid">
+ <div class="stat">
+  <span class="green">Total Income</span>
+  <strong id="income">₹0</strong>
+ </div>
+ <div class="stat">
+  <span class="red">Total Expenses</span>
+  <strong id="expense">₹0</strong>
+ </div>
+</div>
+
+<!-- SPENDING ALERT -->
+<div class="card">
+ <h3>🚦 Spending Status</h3>
+ <div id="status" class="status safe">🟢 Safe Spending</div>
+ <div class="bar"><div class="fill" id="progress"></div></div>
+ <p class="label" id="progressText">0% of income spent</p>
+ <p class="label">Status: Green below 70%, Yellow from 70% to 100%, Red above 100%.</p>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="card">
+ <div class="label">📅 NEXT MONTH COUNTDOWN</div>
+ <div class="big blue" id="countdown">-- Days</div>
+ <div class="label" id="nextMonth">Until next month</div>
+</div>
+
+<!-- MONTHLY REPORT -->
+<div class="card">
+ <h3>📊 Monthly Savings Report</h3>
+ <div class="grid">
+  <div class="stat">
+   <span class="label">Monthly Savings</span>
+   <strong class="green" id="savings">₹0</strong>
+  </div>
+  <div class="stat">
+   <span class="label">Average Daily Spend</span>
+   <strong id="average">₹0</strong>
+  </div>
+  <div class="stat">
+   <span class="label">Room Rent</span>
+   <strong id="rent">₹0</strong>
+  </div>
+  <div class="stat">
+   <span class="label">Daily Expenses</span>
+   <strong id="daily">₹0</strong>
+  </div>
+ </div>
+ <hr>
+ <p class="label">Total transactions: <b id="count">0</b></p>
+</div>
+
+<!-- ADD TRANSACTION -->
+<div class="card">
+ <h3>➕ Add Transaction</h3>
+
+ <select id="type">
+  <option value="income">Income – Pocket Money</option>
+  <option value="expense">Expense</option>
+ </select>
+
+ <select id="category">
+  <option>Pocket Money</option>
+  <option>Room Rent</option>
+  <option>Food</option>
+  <option>Groceries</option>
+  <option>Travel</option>
+  <option>Petrol</option>
+  <option>Electricity Bill</option>
+  <option>Water Bill</option>
+  <option>College Fees</option>
+  <option>Books</option>
+  <option>Shopping</option>
+  <option>Medical</option>
+  <option>Mobile Recharge</option>
+  <option>Internet</option>
+  <option>Gym</option>
+  <option>Entertainment</option>
+  <option>Other</option>
+ </select>
+
+ <input type="number" id="amount" placeholder="Amount in ₹" min="0.01" step="0.01">
+ <input type="date" id="date">
+ <input type="text" id="note" placeholder="Description (optional)">
+
+ <button onclick="addTransaction()">💾 Save Transaction</button>
+</div>
+
+<!-- HISTORY -->
+<div class="card">
+ <h3>📋 Transaction History</h3>
+ <input id="search" placeholder="Search transactions..." oninput="render()">
+
+ <select id="filter">
+  <option value="all">All Transactions</option>
+  <option value="income">Income Only</option>
+  <option value="expense">Expenses Only</option>
+ </select>
+
+ <div id="history"></div>
+</div>
+
+<!-- BACKUP -->
+<div class="card">
+ <h3>💾 Backup & Restore</h3>
+ <p class="label">Keep a safe copy of your records.</p>
+ <div class="actions">
+  <button onclick="backup()">Download Backup</button>
+  <button onclick="document.getElementById('file').click()">Restore Backup</button>
+  <button onclick="exportCSV()">Export CSV</button>
+  <button onclick="clearAll()" style="background:#991b1b">Delete All</button>
+ </div>
+ <input type="file" id="file" accept=".json,application/json" hidden onchange="restoreBackup(event)">
+</div>
+
+<footer>
+Tiwari Ledger © 2026<br>
+Developed by Himanshu Tiwari ❤️
+</footer>
+</div>
+
+<script>
+const KEY="my_personal_ledger_v1";
+
+let transactions=[];
+try{
+ const data=JSON.parse(localStorage.getItem(KEY)||"[]");
+ transactions=Array.isArray(data)?data:[];
+}catch(e){
+ alert("Could not read saved records. Try restoring a backup.");
+}
+
+const $=id=>document.getElementById(id);
+const money=n=>"₹"+Number(n).toLocaleString("en-IN",{
+ maximumFractionDigits:2
+});
+
+function save(){
+ try{
+  localStorage.setItem(KEY,JSON.stringify(transactions));
+  render();
+  return true;
+ }catch(e){
+  alert("Storage unavailable. Please download a backup.");
+  return false;
+ }
+}
+
+// DATE INITIALIZATION
+function localDate(d){
+ return [
+  d.getFullYear(),
+  String(d.getMonth()+1).padStart(2,"0"),
+  String(d.getDate()).padStart(2,"0")
+ ].join("-");
+}
+
+const today=new Date();
+$("date").value=localDate(today);
+$("month").value=localDate(today).slice(0,7);
+
+// CHANGE CATEGORY BASED ON TRANSACTION TYPE
+$("type").addEventListener("change",()=>{
+ $("category").value=$("type").value==="income"
+  ?"Pocket Money":"Room Rent";
+});
+
+// ADD TRANSACTION
+function addTransaction(){
+ const type=$("type").value;
+ const category=$("category").value;
+ const amount=Number($("amount").value);
+ const date=$("date").value;
+ const note=$("note").value.trim();
+
+ if(!Number.isFinite(amount)||amount<=0){
+  alert("Enter a valid amount!");
+  return;
+ }
+ if(!date){
+  alert("Select a date!");
+  return;
+ }
+ if(type==="income"&&category!=="Pocket Money"&&category!=="Other"){
+  alert("Choose Pocket Money or Other for income.");
+  return;
+ }
+
+ const record={
+  id:Date.now().toString()+"-"+Math.random().toString(36).slice(2),
+  type,category,amount,date,note
+ };
+
+ transactions.unshift(record);
+
+ if(save()){
+  $("amount").value="";
+  $("note").value="";
+  alert("Transaction saved successfully! ❤️");
+ }else{
+  transactions.shift();
+ }
+}
+
+// DELETE TRANSACTION
+function deleteTransaction(id){
+ if(!confirm("Delete this transaction?"))return;
+ const old=transactions;
+ transactions=transactions.filter(t=>t.id!==id);
+ if(!save())transactions=old;
+}
+
+// HTML SAFETY
+function escapeHTML(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",
+ '"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+// MAIN DASHBOARD
+function render(){
+
+ const month=$("month").value;
+ const records=transactions.filter(t=>t.date.startsWith(month));
+
+ let income=0,expense=0,rent=0,daily=0;
+
+ records.forEach(t=>{
+  const value=Number(t.amount);
+  if(t.type==="income")income+=value;
+  else{
+   expense+=value;
+   if(t.category==="Room Rent")rent+=value;
+   else daily+=value;
+  }
+ });
+
+ const savings=income-expense;
+ const spentPercent=income>0?(expense/income)*100:0;
+
+ $("income").textContent=money(income);
+ $("expense").textContent=money(expense);
+ $("balance").textContent=money(savings);
+ $("savings").textContent=money(savings);
+ $("rent").textContent=money(rent);
+ $("daily").textContent=money(daily);
+ $("count").textContent=records.length;
+
+ const daysInMonth=new Date(
+  Number(month.slice(0,4)),
+  Number(month.slice(5,7)),0
+ ).getDate();
+
+ const monthDay=month===localDate(today).slice(0,7)
+  ?today.getDate():daysInMonth;
+
+ const averageDays=Math.max(1,monthDay);
+
+ $("average").textContent=money(daily/averageDays);
+
+ // SPENDING STATUS
+ const status=$("status");
+ status.className="status";
+
+ if(income===0){
+  status.classList.add("safe");
+  status.textContent="ℹ️ Add monthly income to track spending";
+ }else if(expense>income){
+  status.classList.add("danger");
+  status.textContent="🔴 Overspending Alert!";
+ }else if(spentPercent>=70){
+  status.classList.add("warning");
+  status.textContent="🟡 Budget Getting Low!";
+ }else{
+  status.classList.add("safe");
+  status.textContent="🟢 Safe Spending!";
+ }
+
+ $("progress").style.width=Math.min(spentPercent,100)+"%";
+ $("progress").style.background=
+  spentPercent>100?"#fb7185":
+  spentPercent>=70?"#facc15":"#4ade80";
+
+ $("progressText").textContent=
+  income===0?"Add income to calculate your budget":
+  spentPercent.toFixed(1)+"% of monthly income spent";
+
+ // NEXT MONTH COUNTDOWN
+ const next=new Date(today.getFullYear(),today.getMonth()+1,1);
+ const remaining=daysInMonth-today.getDate();
+
+ $("countdown").textContent=remaining+" Days Remaining";
+ $("nextMonth").textContent=
+  "Until "+next.toLocaleString("en-IN",{month:"long",year:"numeric"});
+
+ // TRANSACTION HISTORY
+ const filter=$("filter").value;
+ const query=$("search").value.toLowerCase();
+
+ const list=records.filter(t=>
+  (filter==="all"||t.type===filter)&&
+  (t.category+" "+t.note+" "+t.date).toLowerCase().includes(query)
+ );
+
+ $("history").innerHTML=list.length?
+ list.map(t=>`
+ <div class="transaction">
+  <div style="min-width:0">
+   <b>${escapeHTML(t.category)}</b>
+   <br><small>${escapeHTML(t.date)} · ${escapeHTML(t.note||"No description")}</small>
+  </div>
+  <div style="text-align:right;flex-shrink:0">
+   <b class="${t.type==="income"?"green":"red"}">
+    ${t.type==="income"?"+":"-"}${money(t.amount)}
+   </b>
+   <br>
+   <button class="delete" onclick="deleteTransaction('${escapeHTML(t.id)}')">Delete</button>
+  </div>
+ </div>`).join("")
+ :'<p class="label">No transactions found for this month.</p>';
+}
+
+// BACKUP
+function backup(){
+ download(
+  new Blob([JSON.stringify(transactions,null,2)],{
+   type:"application/json"
+  }),"Tiwari_Ledger_Backup.json"
+ );
+}
+
+// RESTORE
+function restoreBackup(event){
+ const file=event.target.files[0];
+ if(!file)return;
+
+ const reader=new FileReader();
+
+ reader.onload=()=>{
+  try{
+   const data=JSON.parse(reader.result);
+
+   const valid=Array.isArray(data)&&data.every(t=>
+    t&&typeof t==="object"&&
+    ["income","expense"].includes(t.type)&&
+    typeof t.category==="string"&&
+    Number.isFinite(Number(t.amount))&&Number(t.amount)>0&&
+    /^\d{4}-\d{2}-\d{2}$/.test(t.date)&&
+    typeof t.id==="string"
+   );
+
+   if(!valid)throw new Error();
+
+   if(confirm("Replace existing records with this backup?")){
+    const old=transactions;
+    transactions=data;
+    if(save())alert("Backup restored successfully!");
+    else transactions=old;
+   }
+  }catch(e){
+   alert("Invalid backup file!");
+  }
+  event.target.value="";
+ };
+ reader.readAsText(file);
+}
+
+// CSV EXPORT
+function exportCSV(){
+ const rows=[
+  ["Date","Type","Category","Amount","Description"],
+  ...transactions.map(t=>[
+   t.date,t.type,t.category,t.amount,t.note||""
+  ])
+ ];
+
+ const csv=rows.map(row=>
+  row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")
+ ).join("\r\n");
+
+ download(
+  new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}),
+  "Tiwari_Ledger.csv"
+ );
+}
+
+// DOWNLOAD HELPER
+function download(blob,name){
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download=name;
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+// DELETE ALL
+function clearAll(){
+ if(confirm("Delete all your ledger records?")){
+  if(confirm("This cannot be undone without a backup!")){
+   const old=transactions;
+   transactions=[];
+   if(!save())transactions=old;
+  }
+ }
+}
+
+// MONTH AND FILTER EVENTS
+$("month").addEventListener("change",render);
+$("filter").addEventListener("change",render);
+
+// INITIALIZE
+render();
+</script>
+</body>
+</html>
